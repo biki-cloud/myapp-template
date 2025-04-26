@@ -445,4 +445,52 @@ describe("ProductService", () => {
 
 > `.env.example` をコピーして `.env` を作成し、各値を自分の環境に合わせて設定してください。
 
----
+### Jest + TypeScript + DI(tsyringe)の注意点
+
+- Jest で TypeScript のデコレーター/DI(tsyringe)を使う場合、`ts-jest`と`reflect-metadata`が必須です。
+- `tsconfig.json`に以下を追加してください:
+  ```json
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true
+  ```
+- `jest.config.js`例:
+  ```js
+  module.exports = {
+    preset: "ts-jest",
+    testEnvironment: "node",
+    moduleNameMapper: {
+      "^@/(.*)$": "<rootDir>/$1",
+    },
+    transform: {
+      "^.+\\.(ts|tsx)$": "ts-jest",
+    },
+    testMatch: [
+      "<rootDir>/**/__tests__/**/*.(ts|tsx|js)",
+      "<rootDir>/**/*.(spec|test).(ts|tsx|js)",
+    ],
+  };
+  ```
+- `reflect-metadata`を依存追加し、テストやエントリポイントで`import "reflect-metadata";`を必ず記述してください。
+
+### Shadcn UI の導入
+
+- Shadcn UI の Button 等を使う場合は
+  ```sh
+  pnpm dlx shadcn@latest add button
+  ```
+  で`components/ui/button.tsx`が生成されます。
+
+### テスト実行
+
+- `pnpm test:coverage` でカバレッジ付きテストが実行できます。
+- `package.json`の scripts 例:
+  ```json
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  }
+  ```
+
+### TypeScript のパスエイリアス
+
+- `@/*` のパスエイリアスは `tsconfig.json` の `"paths"` だけでなく、Jest の `moduleNameMapper` でも同様に設定してください。
