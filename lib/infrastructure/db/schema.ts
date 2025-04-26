@@ -1,5 +1,4 @@
 import {
-  pgTable,
   pgSchema,
   serial,
   varchar,
