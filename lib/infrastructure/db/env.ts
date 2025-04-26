@@ -11,9 +11,9 @@ export function getPostgresUrl(): string {
 }
 
 export function getSchema(): string {
-  const schema = process.env.POSTGRES_SCHEMA;
+  const schema = process.env.SCHEMA_NAME;
   if (!schema) {
-    throw new Error("POSTGRES_SCHEMA environment variable is not set");
+    throw new Error("SCHEMA_NAME environment variable is not set");
   }
   return schema;
 }

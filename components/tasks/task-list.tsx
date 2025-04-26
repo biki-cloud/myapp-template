@@ -1,3 +1,5 @@
+"use client";
+
 import type { Task } from "@/lib/core/domain/interface/task.domain";
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
