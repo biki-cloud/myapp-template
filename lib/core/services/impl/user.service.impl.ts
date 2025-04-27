@@ -3,6 +3,7 @@ import type {
   User,
   CreateUserInput,
   UpdateUserInput,
+  UserWithPassword,
 } from "@/lib/core/domain/user.domain";
 import type { IUserRepository } from "../../repositories/interface/user.repository.interface";
 import type { IUserService } from "../interface/user.service.interface";
@@ -34,7 +35,6 @@ export class UserService implements IUserService {
     if (existingUser) {
       throw new Error("このメールアドレスは既に登録されています。");
     }
-
     return this.userRepository.create(input);
   }
 
@@ -57,8 +57,8 @@ export class UserService implements IUserService {
     email: string,
     password: string
   ): Promise<User | null> {
-    const user = await this.userRepository.findByEmail(email);
-    if (!user || !user.passwordHash) return null;
+    const user = await this.userRepository.findByEmailWithPassword(email);
+    if (!user) return null;
 
     const isValid = await this.authService.comparePasswords(
       password,

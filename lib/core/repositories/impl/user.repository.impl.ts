@@ -8,6 +8,7 @@ import type {
   User,
   CreateUserInput,
   UpdateUserInput,
+  UserWithPassword,
 } from "@/lib/core/domain/user.domain";
 import type { IUserRepository } from "./../interface/user.repository.interface";
 
@@ -48,7 +49,14 @@ export class UserRepository implements IUserRepository {
   }
 
   async create(input: CreateUserInput): Promise<User> {
-    const result = await this.db.insert(user).values(input).returning();
+    const result = await this.db
+      .insert(user)
+      .values({
+        email: input.email,
+        name: input.name,
+        password: input.passwordHash,
+      })
+      .returning();
     return this.toDomainUser(result[0]);
   }
 
@@ -68,5 +76,23 @@ export class UserRepository implements IUserRepository {
       .where(eq(user.id, id))
       .returning();
     return result.length > 0;
+  }
+
+  async findByEmailWithPassword(
+    email: string
+  ): Promise<UserWithPassword | null> {
+    const result = await this.db
+      .select()
+      .from(user)
+      .where(eq(user.email, email))
+      .limit(1);
+    if (!result[0]) return null;
+    return {
+      id: result[0].id,
+      email: result[0].email,
+      name: result[0].name,
+      createdAt: result[0].createdAt,
+      passwordHash: result[0].password,
+    };
   }
 }
