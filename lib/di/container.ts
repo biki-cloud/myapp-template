@@ -30,10 +30,6 @@ export function initializeContainer() {
 
 initializeContainer();
 
-export function getContainer() {
-  return container;
-}
-
 export function getDatabase() {
   return container.resolve<Database>("Database");
 }
