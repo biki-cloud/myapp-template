@@ -1,20 +1,74 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   preset: "ts-jest",
-  testEnvironment: "node",
+  testEnvironment: "jsdom",
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",
+    "^jose$": "<rootDir>/lib/infrastructure/auth/__mocks__/jose.ts",
+    "^lib/infrastructure/db/drizzle$":
+      "<rootDir>/lib/infrastructure/db/__mocks__/drizzle.ts",
   },
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  testPathIgnorePatterns: [
+    "<rootDir>/.next/",
+    "<rootDir>/node_modules/",
+    "<rootDir>/e2e/",
+    "<rootDir>/playwright-report/",
+  ],
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
+      {
+        tsconfig: "lib/config/tests/tsconfig.test.json",
+        isolatedModules: true,
+        useESM: true,
+      },
+    ],
   },
-  globals: {
-    "ts-jest": {
-      tsconfig: "tsconfig.json",
+  transformIgnorePatterns: ["/node_modules/(?!@panva/hkdf)/"],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  extensionsToTreatAsEsm: [".ts", ".tsx"],
+  collectCoverage: true,
+  coverageReporters: ["json-summary", "text", "lcov"],
+  collectCoverageFrom: [
+    "**/*.{js,jsx,ts,tsx}",
+    "!**/*.d.ts",
+    "!**/node_modules/**",
+    "!**/.next/**",
+    "!**/coverage/**",
+    "!**/e2e/**",
+    "!**/playwright-report/**",
+    "!**/public/**",
+    "!**/page.tsx",
+    "!**/layout.tsx",
+    "!**/not-found.tsx",
+    "!**/error.tsx",
+    "!**/loading.tsx",
+    "!**/route.ts",
+    "!**/*.config.{js,ts}",
+    "!**/__tests__/**",
+    "!**/__mocks__/**",
+    "!**/types/**",
+    "!**/test/**",
+    "!**/components/ui/**",
+    "!**/lib/local-setup/**",
+    "!**/lib/infrastructure/db/seed.ts",
+    "!**/lib/infrastructure/db/migrate.ts",
+    "!**/lib/config/env.ts",
+    "!**/lib/shared/test-utils/**",
+    "!**/lib/shared/constants/**",
+    "!**/middleware.ts",
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 85,
+      functions: 90,
+      lines: 90,
+      statements: 90,
     },
   },
-  testMatch: [
-    "<rootDir>/**/__tests__/**/*.(ts|tsx|js)",
-    "<rootDir>/**/*.(spec|test).(ts|tsx|js)",
-  ],
+  maxWorkers: 4,
+  testTimeout: 30000,
+  verbose: false,
+  silent: true,
 };
