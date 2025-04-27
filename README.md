@@ -424,4 +424,4 @@ describe("ProductService", () => {
 
 ### TypeScript のパスエイリアス
 
-- `@/*` のパスエイリアスは `tsconfig.json` の `"paths"` だけでなく、Jest の `moduleNameMapper` でも同様に設定してください。
+- `@/*` のパスエイリアスは `tsconfig.json` の `"paths"` だけでなく、Jest の `moduleNameMapper` でも同様に設定してください
