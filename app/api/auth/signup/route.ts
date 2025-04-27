@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import "../_init";
 import { container } from "tsyringe";
 import { IAuthService } from "@/lib/core/services/interface/auth.service.interface";
 import { NextRequest, NextResponse } from "next/server";

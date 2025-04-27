@@ -23,9 +23,6 @@ export function initializeContainer() {
   isInitialized = true;
 }
 
-// 初期化を即時実行
-initializeContainer();
-
 export function getContainer() {
   return container;
 }

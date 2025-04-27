@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import "../_init";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/lib/infrastructure/db/drizzle";
 import { NextAuthOptions } from "next-auth";
