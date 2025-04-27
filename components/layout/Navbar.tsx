@@ -23,6 +23,9 @@ export function Navbar() {
               <span className="text-sm text-gray-700">
                 {session.user.name || session.user.email}
               </span>
+              <Link href="/settings">
+                <Button variant="ghost">設定</Button>
+              </Link>
               <Button
                 variant="outline"
                 onClick={() => signOut({ callbackUrl: "/" })}
