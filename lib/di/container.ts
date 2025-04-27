@@ -28,6 +28,8 @@ export function initializeContainer() {
   isInitialized = true;
 }
 
+initializeContainer();
+
 export function getContainer() {
   return container;
 }
