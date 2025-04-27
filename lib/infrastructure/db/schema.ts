@@ -11,12 +11,12 @@ import { getSchema } from "./env";
 // スキーマを定義
 export const schema = pgSchema(getSchema());
 
-export const tasks = schema.table("tasks", {
+export const user = schema.table("users", {
   id: serial("id").primaryKey(),
-  title: varchar("title", { length: 255 }).notNull(),
-  isDone: boolean("is_done").notNull().default(false),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  password: varchar("password", { length: 255 }).notNull(),
+  name: varchar("name", { length: 100 }),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export type TaskRow = typeof tasks.$inferSelect;
-export type InsertTaskRow = typeof tasks.$inferInsert;
+export type UserRow = typeof user.$inferSelect;
