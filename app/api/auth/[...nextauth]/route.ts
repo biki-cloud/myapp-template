@@ -1,11 +1,12 @@
 import "reflect-metadata";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db } from "@/lib/infrastructure/db/drizzle";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { container } from "tsyringe";
-import { IAuthService } from "@/lib/core/services/interface/auth.service.interface";
+import { getDatabase, getAuthService } from "@/lib/di/container";
+
+const authService = getAuthService();
+const db = getDatabase();
 
 export const authOptions: NextAuthOptions = {
   adapter: DrizzleAdapter(db),
@@ -19,7 +20,6 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const authService = container.resolve<IAuthService>("AuthService");
         const user = await authService.signIn(
           credentials.email,
           credentials.password
