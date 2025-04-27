@@ -4,7 +4,6 @@ import { user } from "@/lib/infrastructure/db/schema";
 import { eq } from "drizzle-orm";
 import { compare, hash } from "bcryptjs";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
@@ -53,7 +52,7 @@ export class AuthService implements IAuthService {
   }
 
   async getSession() {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession();
     if (!session?.user) return null;
     return {
       id: session.user.id,

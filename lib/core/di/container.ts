@@ -8,36 +8,32 @@ import type { IUserRepository } from "../repositories/interface/user.repository.
 import { UserRepository } from "../repositories/impl/user.repository.impl";
 import type { IUserService } from "../services/interface/user.service.interface";
 import { UserService } from "../services/impl/user.service.impl";
+import { logger } from "@/lib/logger";
+
+let isInitialized = false;
 
 export function initializeContainer() {
+  logger.info("DIコンテナを初期化中");
+
   // データベースの登録
-  if (typeof window !== "undefined") {
-    if (!container.isRegistered("Database")) {
-      container.registerInstance<Database>("Database", db);
-    }
-  }
+  container.registerInstance<Database>("Database", db);
 
   // サービスとリポジトリの登録
-  if (!container.isRegistered("AuthService")) {
-    container.registerSingleton<IAuthService>("AuthService", AuthService);
-  }
+  container.registerSingleton<IAuthService>("AuthService", AuthService);
 
-  if (!container.isRegistered("UserService")) {
-    container.registerSingleton<IUserService>("UserService", UserService);
-  }
+  container.registerSingleton<IUserService>("UserService", UserService);
 
-  if (!container.isRegistered("UserRepository")) {
-    container.registerSingleton<IUserRepository>(
-      "UserRepository",
-      UserRepository
-    );
-  }
+  container.registerSingleton<IUserRepository>(
+    "UserRepository",
+    UserRepository
+  );
+
+  isInitialized = true;
 }
 
+initializeContainer();
+
 export function getDatabase(): Database {
-  if (!container.isRegistered("Database")) {
-    container.registerInstance<Database>("Database", db);
-  }
   return container.resolve<Database>("Database");
 }
 
