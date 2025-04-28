@@ -3,11 +3,11 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getAuthClientService } from "@/lib/di/client-side-container";
+import { getAuthService } from "@/lib/di/client-side-container";
 
 export function Navbar() {
   const { data: session, status } = useSession();
-  const authClientService = getAuthClientService();
+  const authService = getAuthService();
 
   return (
     <nav className="border-b">
@@ -28,10 +28,7 @@ export function Navbar() {
               <Link href="/settings">
                 <Button variant="ghost">設定</Button>
               </Link>
-              <Button
-                variant="outline"
-                onClick={() => authClientService.signOut()}
-              >
+              <Button variant="outline" onClick={() => authService.signOut()}>
                 ログアウト
               </Button>
             </>
