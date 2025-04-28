@@ -1,13 +1,13 @@
-import { IAuthService } from "../interface/auth.service.interface";
+import { injectable, inject } from "tsyringe";
+import type { IAuthServerService } from "../interface/auth.service.interface";
 import type { Database } from "@/lib/infrastructure/db/drizzle";
 import { user } from "@/lib/infrastructure/db/schema";
 import { eq } from "drizzle-orm";
 import { compare, hash } from "bcryptjs";
 import { getServerSession } from "next-auth";
-import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class AuthService implements IAuthService {
+export class AuthServerService implements IAuthServerService {
   constructor(@inject("Database") protected readonly db: Database) {}
 
   async signIn(email: string, password: string) {

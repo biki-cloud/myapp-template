@@ -1,4 +1,4 @@
-export interface IAuthService {
+export interface IAuthServerService {
   signIn(
     email: string,
     password: string
@@ -21,4 +21,5 @@ export interface IAuthService {
   } | null>;
   comparePasswords(password: string, hashedPassword: string): Promise<boolean>;
   hashPassword(password: string): Promise<string>;
+  // 他のサーバー専用メソッドがあればここに追加
 }
