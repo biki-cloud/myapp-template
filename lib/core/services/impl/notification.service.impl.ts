@@ -17,4 +17,22 @@ export class NotificationService implements INotificationService {
       data: { url: "/" },
     });
   }
+
+  async requestPermission(): Promise<NotificationPermission> {
+    return this.notificationRepository.requestPermission();
+  }
+
+  getPermission(): NotificationPermission {
+    return this.notificationRepository.getPermission();
+  }
+
+  async registerServiceWorker(): Promise<
+    ServiceWorkerRegistration | undefined
+  > {
+    return this.notificationRepository.registerServiceWorker();
+  }
+
+  isSupported(): boolean {
+    return this.notificationRepository.isSupported();
+  }
 }
