@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-
 export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
@@ -9,9 +6,9 @@ export default function NotFound() {
       <p className="mt-2 text-gray-600">
         お探しのページは存在しないか、移動された可能性があります。
       </p>
-      <Button asChild className="mt-8">
-        <Link href="/">トップページに戻る</Link>
-      </Button>
+      <a href="/" className="mt-8 text-blue-600 hover:underline">
+        トップページに戻る
+      </a>
     </div>
   );
 }
