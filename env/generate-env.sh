@@ -1,15 +1,19 @@
 #!/bin/bash
 
+# ./generate-env.sh <env>
+# ./generate-env.sh preview
+# ./generate-env.sh production
+
 ENV=$1
 
-ENV_FILE=".env.${ENV}.tmpl"
-COMMON_FILE=".env.common"
+ENV_FILE="overlays/.env.${ENV}.tmpl"
+COMMON_FILE="base/.env.common"
 OUTPUT_FILE=".env.${ENV}"
 
 # $ENVがlocal, dev, prd, githubactionsのいずれかでなければエラー終了
-if [ "$ENV" != "local" ] && [ "$ENV" != "dev" ] && [ "$ENV" != "prd" ] && [ "$ENV" != "githubactions" ]; then
+if [ "$ENV" != "local" ] && [ "$ENV" != "preview" ] && [ "$ENV" != "production" ] && [ "$ENV" != "githubactions" ]; then
   echo "Usage: $0 <env>" >&2
-  echo "<env> must be one of local, dev, prd, githubactions." >&2
+  echo "<env> must be one of local, preview, production, githubactions." >&2
   exit 1
 fi
 
