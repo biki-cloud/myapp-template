@@ -3,8 +3,8 @@
 # 以下を叩いてリンク付けが必要。
 # vercel link --project myapp-template
 
-# ./set-vercel-secrets.sh .env.preview preview
-# ./set-vercel-secrets.sh .env.production production
+# ./set-vercel-environments.sh .env.preview preview
+# ./set-vercel-environments.sh .env.production production
 
 # 引数チェック
 if [ $# -ne 2 ]; then
@@ -35,9 +35,10 @@ do
   key=$(echo "$key" | xargs)
   value=$(echo "$value" | xargs)
 
-  echo "Setting Vercel env: $key"
+  echo "------------- Setting Vercel env: $key -------------"
 
   # Vercel CLIで登録（非対話モード）
-  echo -n "$value" | vercel env add "$key" "$VERCEL_ENV" --yes
+  NODE_OPTIONS="--no-deprecation" vercel env rm "$key" "$VERCEL_ENV" --yes
+  echo -n "$value" | NODE_OPTIONS="--no-deprecation" vercel env add "$key" "$VERCEL_ENV" --yes
 
 done < "$ENV_FILE"
