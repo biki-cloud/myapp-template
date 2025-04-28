@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { getNotificationService } from "@/lib/di/client-side-container";
 
 interface UseNotificationSetupResult {
   isSupported: boolean;
@@ -9,35 +10,31 @@ interface UseNotificationSetupResult {
 }
 
 export function useNotificationSetup(): UseNotificationSetupResult {
+  const notificationService = getNotificationService();
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isGranted, setIsGranted] = useState(false);
-  const isSupported =
-    typeof window !== "undefined" &&
-    "serviceWorker" in navigator &&
-    "Notification" in window;
+  const isSupported = notificationService.isSupported();
 
   useEffect(() => {
     if (!isSupported) return;
-    setIsGranted(Notification.permission === "granted");
-  }, [isSupported]);
+    setIsGranted(notificationService.getPermission() === "granted");
+  }, [isSupported, notificationService]);
 
   const requestPermission = useCallback(async () => {
     if (!isSupported) return;
     setIsLoading(true);
     setHasError(false);
     try {
-      // Service Worker登録
-      await navigator.serviceWorker.register("/service-worker.js");
-      // 通知許可リクエスト
-      const permission = await Notification.requestPermission();
+      await notificationService.registerServiceWorker();
+      const permission = await notificationService.requestPermission();
       setIsGranted(permission === "granted");
     } catch (e) {
       setHasError(true);
     } finally {
       setIsLoading(false);
     }
-  }, [isSupported]);
+  }, [isSupported, notificationService]);
 
   return { isSupported, isLoading, hasError, isGranted, requestPermission };
 }

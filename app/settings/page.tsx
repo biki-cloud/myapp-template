@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useNotificationSetup } from "@/components/ui/use-notification-setup";
 import { Button } from "@/components/ui/button";
 import { useCallback, useState } from "react";
+import { getNotificationService } from "@/lib/di/client-side-container";
 
 export default function SettingsPage() {
   const { data: session, status } = useSession();
@@ -73,29 +74,21 @@ function TestNotificationButton({ isEnabled }: { isEnabled: boolean }) {
   const [isSending, setIsSending] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const notificationService = getNotificationService();
 
   const handleSend = useCallback(async () => {
     setIsSending(true);
     setHasError(false);
     setIsSent(false);
     try {
-      const reg = await navigator.serviceWorker.getRegistration(
-        "/service-worker.js"
-      );
-      if (!reg) throw new Error("Service Worker未登録");
-      reg.showNotification("テスト通知", {
-        body: "これはテスト通知です。",
-        icon: "/icon512_rounded.png",
-        badge: "/icon512_maskable.png",
-        data: { url: "/" },
-      });
+      await notificationService.testNotification();
       setIsSent(true);
     } catch (e) {
       setHasError(true);
     } finally {
       setIsSending(false);
     }
-  }, []);
+  }, [notificationService]);
 
   return (
     <div className="pt-2">

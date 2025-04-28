@@ -13,9 +13,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { getAuthClientService } from "@/lib/di/client-side-container";
 
 const formSchema = z
   .object({
@@ -32,6 +32,7 @@ const formSchema = z
 export function SignUpForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const authClientService = getAuthClientService();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,37 +46,24 @@ export function SignUpForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          password: values.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
+      const data = await authClientService.signUp(
+        values.name,
+        values.email,
+        values.password
+      );
+      if (data?.error) {
         setError(data.error || "アカウントの作成に失敗しました");
         return;
       }
-
       // サインアップ成功後、自動的にサインイン
-      const result = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        redirect: false,
-      });
-
+      const result = await authClientService.signIn(
+        values.email,
+        values.password
+      );
       if (result?.error) {
         setError("サインインに失敗しました");
         return;
       }
-
       router.push("/");
     } catch (error) {
       setError("エラーが発生しました");

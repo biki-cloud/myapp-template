@@ -16,3 +16,7 @@ export interface UpdateUserInput {
   email?: string;
   passwordHash?: string;
 }
+
+export interface UserWithPassword extends User {
+  passwordHash: string;
+}

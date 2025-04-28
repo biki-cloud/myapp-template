@@ -3,12 +3,12 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { getDatabase, getAuthService } from "@/lib/di/container";
+import { getDatabase, getAuthService } from "@/lib/di/server-side-container";
 
 const authService = getAuthService();
 const db = getDatabase();
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   adapter: DrizzleAdapter(db),
   providers: [
     CredentialsProvider({
