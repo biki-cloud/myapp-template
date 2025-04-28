@@ -16,14 +16,7 @@ module.exports = {
     "<rootDir>/playwright-report/",
   ],
   transform: {
-    "^.+\\.(ts|tsx)$": [
-      "ts-jest",
-      {
-        tsconfig: "lib/config/tests/tsconfig.test.json",
-        isolatedModules: true,
-        useESM: true,
-      },
-    ],
+    "^.+\\.(ts|tsx)$": "ts-jest",
   },
   transformIgnorePatterns: ["/node_modules/(?!@panva/hkdf)/"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
@@ -31,7 +24,7 @@ module.exports = {
   collectCoverage: true,
   coverageReporters: ["json-summary", "text", "lcov"],
   collectCoverageFrom: [
-    "**/*.{js,jsx,ts,tsx}",
+    "**/*.{js,ts}",
     "!**/*.d.ts",
     "!**/node_modules/**",
     "!**/.next/**",
