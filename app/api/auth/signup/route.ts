@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { getAuthService } from "@/lib/core/di/container";
+import { getAuthService } from "@/lib/di/server-side-container";
 import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
 import { logger } from "@/lib/logger";
