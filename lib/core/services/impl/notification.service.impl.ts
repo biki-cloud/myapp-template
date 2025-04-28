@@ -1,12 +1,16 @@
+import { injectable, inject } from "tsyringe";
 import type { INotificationService } from "../interface/notification.service.interface";
+import type { INotificationRepository } from "@/lib/core/repositories/interface/notification.repository.interface";
 
+@injectable()
 export class NotificationService implements INotificationService {
+  constructor(
+    @inject("NotificationRepository")
+    private readonly notificationRepository: INotificationRepository
+  ) {}
+
   async testNotification() {
-    const reg = await navigator.serviceWorker.getRegistration(
-      "/service-worker.js"
-    );
-    if (!reg) throw new Error("Service Worker未登録");
-    reg.showNotification("テスト通知", {
+    await this.notificationRepository.testNotification("テスト通知", {
       body: "これはテスト通知です。",
       icon: "/icon512_rounded.png",
       badge: "/icon512_maskable.png",
