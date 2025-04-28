@@ -13,9 +13,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { getAuthClientService } from "@/lib/di/client-side-container";
 
 const formSchema = z.object({
   email: z.string().email("有効なメールアドレスを入力してください"),
@@ -27,6 +27,7 @@ export function SignInForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   const [error, setError] = useState<string | null>(null);
+  const authClientService = getAuthClientService();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,17 +39,11 @@ export function SignInForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const res = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        redirect: false,
-      });
-
+      const res = await authClientService.signIn(values.email, values.password);
       if (res?.error) {
         setError("メールアドレスまたはパスワードが正しくありません");
         return;
       }
-
       router.push(callbackUrl);
     } catch (error) {
       setError("エラーが発生しました");
