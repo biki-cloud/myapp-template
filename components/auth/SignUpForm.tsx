@@ -15,10 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {
-  getUserApiService,
-  getAuthClientService,
-} from "@/lib/di/client-side-container";
+import { getAuthClientService } from "@/lib/di/client-side-container";
 
 const formSchema = z
   .object({
@@ -35,7 +32,6 @@ const formSchema = z
 export function SignUpForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const userApiService = getUserApiService();
   const authClientService = getAuthClientService();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -50,7 +46,7 @@ export function SignUpForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const data = await userApiService.signUp(
+      const data = await authClientService.signUp(
         values.name,
         values.email,
         values.password

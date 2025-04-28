@@ -8,8 +8,6 @@ import type { INotificationRepository } from "@/lib/core/repositories/interface/
 import { NotificationRepository } from "@/lib/core/repositories/impl/notification.repository";
 import type { IAuthClientService } from "@/lib/core/services/interface/auth.client.service.interface";
 import { AuthClientService } from "@/lib/core/services/impl/auth.client.service.impl";
-import type { IUserApiService } from "@/lib/core/services/interface/user.api.service.interface";
-import { UserApiService } from "@/lib/core/services/impl/user.api.service.impl";
 
 let isInitialized = false;
 
@@ -32,11 +30,6 @@ export function initializeContainer() {
     AuthClientService
   );
 
-  container.registerSingleton<IUserApiService>(
-    "UserApiService",
-    UserApiService
-  );
-
   isInitialized = true;
 }
 
@@ -48,8 +41,4 @@ export function getNotificationService() {
 
 export function getAuthClientService() {
   return container.resolve<IAuthClientService>("AuthClientService");
-}
-
-export function getUserApiService() {
-  return container.resolve<IUserApiService>("UserApiService");
 }
