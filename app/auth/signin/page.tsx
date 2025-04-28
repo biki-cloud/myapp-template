@@ -1,5 +1,6 @@
 import { SignInForm } from "@/components/auth/SignInForm";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function SignInPage() {
   return (
@@ -10,7 +11,9 @@ export default function SignInPage() {
             サインイン
           </h2>
         </div>
-        <SignInForm />
+        <Suspense fallback={<div>読み込み中...</div>}>
+          <SignInForm />
+        </Suspense>
         <div className="text-center text-sm">
           <span className="text-gray-600">アカウントをお持ちでない方は</span>{" "}
           <Link

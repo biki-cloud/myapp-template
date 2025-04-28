@@ -8,7 +8,7 @@ import { getDatabase, getAuthService } from "@/lib/di/server-side-container";
 const authService = getAuthService();
 const db = getDatabase();
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   adapter: DrizzleAdapter(db),
   providers: [
     CredentialsProvider({

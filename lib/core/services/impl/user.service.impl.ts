@@ -7,7 +7,7 @@ import type {
 } from "@/lib/core/domain/user.domain";
 import type { IUserRepository } from "../../repositories/interface/user.repository.interface";
 import type { IUserService } from "../interface/user.service.interface";
-import type { IAuthService } from "@/lib/core/services/interface/auth.service.interface";
+import type { IAuthServerService } from "@/lib/core/services/interface/auth.service.interface";
 
 @injectable()
 export class UserService implements IUserService {
@@ -15,7 +15,7 @@ export class UserService implements IUserService {
     @inject("UserRepository")
     private readonly userRepository: IUserRepository,
     @inject("AuthService")
-    private readonly authService: IAuthService
+    private readonly authService: IAuthServerService
   ) {}
 
   async findAll(): Promise<User[]> {

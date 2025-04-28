@@ -50,7 +50,7 @@ export function getDatabase() {
   return container.resolve<Database>("Database");
 }
 
-export function getAuthServerService() {
+export function getAuthService() {
   return container.resolve<IAuthServerService>("AuthServerService");
 }
 
