@@ -1,9 +1,9 @@
 import { signIn, signOut } from "next-auth/react";
-import type { IAuthService } from "../interface/auth.client.service.interface";
+import type { IAuthClientService } from "../interface/auth.client.service.interface";
 import { injectable } from "tsyringe";
 
 @injectable()
-export class AuthService implements IAuthService {
+export class AuthClientService implements IAuthClientService {
   async signUp(name: string, email: string, password: string) {
     const response = await fetch("/api/auth/signup", {
       method: "POST",

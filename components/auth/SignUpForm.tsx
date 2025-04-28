@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { getAuthService } from "@/lib/di/client-side-container";
+import { getAuthClientService } from "@/lib/di/client-side-container";
 
 const formSchema = z
   .object({
@@ -32,7 +32,7 @@ const formSchema = z
 export function SignUpForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const authService = getAuthService();
+  const authClientService = getAuthClientService();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,7 +46,7 @@ export function SignUpForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const data = await authService.signUp(
+      const data = await authClientService.signUp(
         values.name,
         values.email,
         values.password
@@ -56,7 +56,10 @@ export function SignUpForm() {
         return;
       }
       // サインアップ成功後、自動的にサインイン
-      const result = await authService.signIn(values.email, values.password);
+      const result = await authClientService.signIn(
+        values.email,
+        values.password
+      );
       if (result?.error) {
         setError("サインインに失敗しました");
         return;
