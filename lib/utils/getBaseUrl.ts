@@ -5,6 +5,11 @@
  * - 開発環境: http://localhost:3000
  */
 export function getBaseUrl(): string {
+  // クライアントサイドの場合
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+
   // Vercel本番/プレビュー環境の場合
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
