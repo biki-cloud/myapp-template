@@ -10,9 +10,6 @@ export default function NotFound() {
       <p className="mt-2 text-gray-600">
         お探しのページは存在しないか、移動された可能性があります。
       </p>
-      <Link href="/" className="mt-8 text-blue-600 hover:underline">
-        トップページに戻る
-      </Link>
     </div>
   );
 }
