@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# ./set-github-environments.sh <env-file-path> <environment-name>
+# ./set-github-environments.sh .env.preview preview
+# ./set-github-environments.sh .env.production production 
+
 # 引数チェック
 if [ $# -ne 2 ]; then
   echo "Usage: $0 <env-file-path> <environment-name>"
@@ -31,7 +35,7 @@ do
   key=$(echo "$key" | xargs)
   value=$(echo "$value" | xargs)
 
-  echo "Setting secret: $key"
+  echo "------------- Setting secret: $key -------------"
 
   # ghコマンドで登録
   gh secret set "$key" --body "$value" --repo "$REPO" --env "$ENVIRONMENT"

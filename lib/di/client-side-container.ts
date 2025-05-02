@@ -2,10 +2,9 @@
 
 import "reflect-metadata";
 import { container } from "tsyringe";
-import type { INotificationService } from "@/lib/core/services/interface/notification.service.interface";
-import { NotificationService } from "@/lib/core/services/impl/notification.service.impl";
-import type { INotificationRepository } from "@/lib/core/repositories/interface/notification.repository.interface";
-import { NotificationRepository } from "@/lib/core/repositories/impl/notification.repository";
+import { NotificationRepository } from "@/lib/core/repositories/impl/client-notification.repository.impl";
+import { ClientNotificationService } from "@/lib/core/services/impl/client-notification.service.impl";
+import { NOTIFICATION_TOKENS } from "@/lib/core/constants/notification";
 import type { IAuthClientService } from "@/lib/core/services/interface/auth.client.service.interface";
 import { AuthClientService } from "@/lib/core/services/impl/auth.client.service.impl";
 
@@ -15,14 +14,13 @@ export function initializeContainer() {
   if (isInitialized) return;
 
   // Register Database
-  container.registerSingleton<INotificationRepository>(
-    "NotificationRepository",
+  container.registerSingleton(
+    NOTIFICATION_TOKENS.REPOSITORY,
     NotificationRepository
   );
-
-  container.registerSingleton<INotificationService>(
-    "NotificationService",
-    NotificationService
+  container.registerSingleton(
+    NOTIFICATION_TOKENS.SERVICE,
+    ClientNotificationService
   );
 
   container.registerSingleton<IAuthClientService>(
@@ -35,10 +33,12 @@ export function initializeContainer() {
 
 initializeContainer();
 
-export function getNotificationService() {
-  return container.resolve<INotificationService>("NotificationService");
-}
-
 export function getAuthClientService() {
   return container.resolve<IAuthClientService>("AuthClientService");
+}
+
+export function getNotificationService() {
+  return container.resolve<ClientNotificationService>(
+    NOTIFICATION_TOKENS.SERVICE
+  );
 }
