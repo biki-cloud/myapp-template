@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "local:setup": "npx tsx lib/local-setup/setup.ts",
-    "db:seed:local": "npx tsx lib/infrastructure/db/seed.ts",
+    "db:seed:local": "dotenv -e env/.env.local npx tsx lib/infrastructure/db/seed.ts",
     "db:generate:local": "dotenv -e env/.env.local drizzle-kit generate",
     "db:migrate:local": "dotenv -e env/.env.local npx tsx lib/infrastructure/db/migrate.ts",
     "db:push:local": "dotenv -e env/.env.local drizzle-kit push",
