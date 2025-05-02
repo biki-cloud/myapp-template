@@ -11,30 +11,44 @@ interface UseNotificationSetupResult {
 
 export function useNotificationSetup(): UseNotificationSetupResult {
   const notificationService = getNotificationService();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isGranted, setIsGranted] = useState(false);
-  const isSupported = notificationService.isSupported();
+  const [isSupported, setIsSupported] = useState(false);
 
   useEffect(() => {
-    if (!isSupported) return;
-    setIsGranted(notificationService.getPermission() === "granted");
-  }, [isSupported, notificationService]);
+    async function checkSupport() {
+      try {
+        const supported = await notificationService.checkSupport();
+        setIsSupported(supported);
+      } catch (error) {
+        console.error("Failed to check notification support:", error);
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    checkSupport();
+  }, [notificationService]);
 
   const requestPermission = useCallback(async () => {
-    if (!isSupported) return;
-    setIsLoading(true);
-    setHasError(false);
     try {
-      await notificationService.registerServiceWorker();
-      const permission = await notificationService.requestPermission();
-      setIsGranted(permission === "granted");
-    } catch (e) {
+      setIsLoading(true);
+      const granted = await notificationService.requestPermission();
+      setIsGranted(granted);
+    } catch (error) {
+      console.error("Failed to request notification permission:", error);
       setHasError(true);
     } finally {
       setIsLoading(false);
     }
-  }, [isSupported, notificationService]);
+  }, [notificationService]);
 
-  return { isSupported, isLoading, hasError, isGranted, requestPermission };
+  return {
+    isSupported,
+    isLoading,
+    hasError,
+    isGranted,
+    requestPermission,
+  };
 }

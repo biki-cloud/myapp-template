@@ -5,7 +5,7 @@ import { getPushSubscriptionService } from "@/lib/di/server-side-container";
 import type { WebPushSubscription } from "@/lib/core/repositories/interface/push-subscription.repository.interface";
 import { getServerSession } from "next-auth";
 import { logger } from "@/lib/logger";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/config/auth";
 
 export async function savePushSubscription(subscription: WebPushSubscription) {
   try {

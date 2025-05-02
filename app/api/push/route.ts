@@ -6,10 +6,18 @@ import {
   getVapidPrivateKey,
 } from "@/lib/infrastructure/db/env";
 
+const vapidPublicKey = getVapidPublicKey();
+const vapidPrivateKey = getVapidPrivateKey();
+const vapidEmail = getVapidEmail();
+
+if (!vapidPublicKey || !vapidPrivateKey || !vapidEmail) {
+  throw new Error("VAPID configuration is missing");
+}
+
 webPush.setVapidDetails(
-  `mailto:${getVapidEmail()}`,
-  getVapidPublicKey(),
-  getVapidPrivateKey()
+  `mailto:${vapidEmail}`,
+  vapidPublicKey,
+  vapidPrivateKey
 );
 
 interface PushPayload {
